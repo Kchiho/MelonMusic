@@ -3,7 +3,6 @@ package view;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import model.LastMusicVO;
 import model.MMusicVO;
 
 public class View {
