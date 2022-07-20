@@ -1,5 +1,7 @@
 package controller;
 
+import java.util.ArrayList;
+
 import model.LastMusicDAO;
 import model.LastMusicVO;
 import model.MMusicDAO;
@@ -129,15 +131,22 @@ public class Controller {
 									view.startMyPage(); // 마이페이지 시작 화면
 									MMusicVO mVo = new MMusicVO();
 									LastMusicVO lVo = new LastMusicVO();
+									lVo.setuNum(data.getuNum());
 									if(view.action == 1) { // 최근 들은 노래 정보보기
 										view.showLastMusic(); // 최근 들은 노래정보를 출력합니다 출력
 										//// 배열에서 mNum을 뽑아서 출력해야하는데 
 										//// 출력부분에 vo를 받고
 										//// selectAll이 아니고 selectOne을 해서 size만큼???
-										for(int i = 0; i < lDAO.selectAll(lVo).size(); i++) {
-											mVo.setmNum(lDAO.selectAll(lVo).get(i).getmNum());
-											view.musicInfo(mDAO.selectOne(mVo));
+//										for(int i = 0; i < lDAO.selectAll(lVo).size(); i++) {
+//											mVo.setmNum(lDAO.selectAll(lVo).get(i).getmNum());
+//											view.musicInfo(mDAO.selectOne(mVo));
+//										}
+										ArrayList<MMusicVO> datas= lDAO.lastFive(lVo);
+										if(datas == null) {
+											view.noExistMusic();
+											continue;
 										}
+										view.musicChart(datas);
 									}
 									else if(view.action == 2) { // 회원탈퇴
 										view.userDeletePage(); // 회원 탈퇴 메뉴입니다 출력
