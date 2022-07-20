@@ -23,7 +23,8 @@ public class Controller {
 		}
 	}
 	//// MUserVO uVo
-	//// MMusicVO mvo  로 바꿀예정
+	//// MMusicVO mVo
+	//// LastMusic lVo
 	public void startApp() {
 		while(true) {
 			view.startUser(); // 초기화면
