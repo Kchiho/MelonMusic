@@ -11,8 +11,8 @@ public class LastMusicDAO {
 	PreparedStatement pstmt;
 	final String sql_insert = "INSERT INTO LASTMUSIC VALUES((SELECT NVL(MAX(LNUM),0) +1 FROM LASTMUSIC),?,?)";
 //	final String sql_selectAll = "SELECT * FROM (SELECT A.*,ROWNUM AS RNUM FROM (SELECT * FROM LASTMUSIC ORDER BY LNUM DESC) A WHERE ROWNUM<=5) WHERE RNUM>=1";
-	final String sql_join = "SELECT * FROM (SELECT MAX(A.LNUM) B, A.MNUM FROM (SELECT * FROM LASTMUSIC WHERE UNUM = ?) A GROUP BY A.MNUM ORDER BY B DESC) A, MMUSIC M WHERE A.MNUM=M.MNUM\r\n"
-			+ "ORDER BY B DESC";
+	final String sql_join = "SELECT * FROM (SELECT MAX(A.LNUM) B, A.MNUM FROM (SELECT * FROM LASTMUSIC WHERE UNUM = ?) A GROUP BY A.MNUM) A, "
+			+ "MMUSIC M WHERE A.MNUM=M.MNUM ORDER BY B DESC";
 	final String sql_delete = "DELETE FROM LASTMUSIC WHERE UNUM = ?";
 	
 	public boolean insert(LastMusicVO vo) {
