@@ -3,6 +3,7 @@ package view;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import model.LastMusicVO;
 import model.MMusicVO;
 
 public class View {
@@ -180,7 +181,7 @@ public class View {
 		}
 		System.out.println();
 	}
-
+	
 	public void searchMusicPage() {
 		System.out.println("노래 검색 메뉴입니다.");
 	}

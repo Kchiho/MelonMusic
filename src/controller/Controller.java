@@ -1,5 +1,7 @@
 package controller;
 
+import model.LastMusicDAO;
+import model.LastMusicVO;
 import model.MMusicDAO;
 import model.MMusicVO;
 import model.MUserDAO;
@@ -8,18 +10,20 @@ import view.View;
 
 public class Controller {
 	private MUserDAO uDAO;
-	private MMusicDAO mDAO;	
+	private MMusicDAO mDAO;
+	private LastMusicDAO lDAO;
 	private View view;
 	public Controller() {
 		uDAO = new MUserDAO();
 		mDAO = new MMusicDAO();
+		lDAO = new LastMusicDAO();
 		view = new View();
 		if(!mDAO.hasSample(null)) { // MMUSIC 테이블에 저장된 정보가 없다면
 			Crawling.sample();
 		}
 	}
 	//// MUserVO uv
-	//// MMusic mv  로 바꿀예정
+	//// MMusicVO mv  로 바꿀예정
 	public void startApp() {
 		while(true) {
 			view.startUser(); // 초기화면
@@ -46,6 +50,7 @@ public class Controller {
 							else if(view.action == 2) { // 노래검색
 								view.searchMusicPage(); // 노래 검색 메뉴입니다
 								MMusicVO v = new MMusicVO();
+								LastMusicVO lVo = new LastMusicVO();
 								while(true) {
 									view.writeTA(); // 곡 명이나 가수명을 입력하여 주세요 출력
 									int i = view.inputInt();
@@ -65,6 +70,9 @@ public class Controller {
 											view.listenMusic(); // 듣는중
 											data.setuLastMusic(v.getmNum()); // 최근 들은 노래 정보를 사용자 입력값으로 set
 											uDAO.update(data);
+											lVo.setmNum(v.getmNum());
+											lVo.setuNum(data.getuNum());
+											lDAO.insert(lVo);
 											break;
 										}
 									}
@@ -84,6 +92,9 @@ public class Controller {
 											view.listenMusic(); // 듣는중
 											data.setuLastMusic(v.getmNum()); // 최근 들은 노래 정보를 사용자 입력값으로 set
 											uDAO.update(data);
+											lVo.setmNum(v.getmNum());
+											lVo.setuNum(data.getuNum());
+											lDAO.insert(lVo);
 											break;
 										}
 									}
@@ -97,6 +108,7 @@ public class Controller {
 								view.musicRecPage(); // 노래 추천 메뉴입니다 출력
 								MMusicVO v = new MMusicVO();
 								MMusicVO v2 = new MMusicVO();
+								LastMusicVO lVo = new LastMusicVO();
 								v.setmNum(data.getuLastMusic());
 								//								mDAO.randomSelectOne(v); // MUser uLastmusic 넘겨줌
 								v2 = mDAO.randomSelectOne(v);
@@ -106,16 +118,25 @@ public class Controller {
 									view.listenMusic(); // 듣는중
 									data.setuLastMusic(v2.getmNum()); // 최근 들은 노래 정보를 사용자 입력값으로 set
 									uDAO.update(data);
+									lVo.setmNum(v2.getmNum());
+									lVo.setuNum(data.getuNum());
+									lDAO.insert(lVo);
 								}
 							}
 							else if(view.action == 4) { // 마이페이지
 								while(true) {
 									view.startMyPage(); // 마이페이지 시작 화면
+									MMusicVO v = new MMusicVO();
+									LastMusicVO lVo = new LastMusicVO();
 									if(view.action == 1) { // 최근 들은 노래 정보보기
 										view.showLastMusic(); // 최근 들은 노래정보를 출력합니다 출력
-										MMusicVO v = new MMusicVO();
-										v.setmNum(data.getuLastMusic()); //MUser 받아온 uLastMusic을
-										view.musicInfo(mDAO.selectOne(v)); // MMUsic에 넘겨주고 받은 데이터 출력				
+										//// 배열에서 mNum을 뽑아서 출력해야하는데 
+										//// 출력부분에 vo를 받고
+										//// selectAll이 아니고 selectOne을 해서 size만큼???
+										for(int i = 0; i < lDAO.selectAll(lVo).size(); i++) {
+											v.setmNum(lDAO.selectAll(lVo).get(i).getmNum());
+											view.musicInfo(mDAO.selectOne(v));
+										}
 									}
 									else if(view.action == 2) { // 회원탈퇴
 										view.userDeletePage(); // 회원 탈퇴 메뉴입니다 출력
