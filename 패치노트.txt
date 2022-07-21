@@ -29,3 +29,5 @@ Model - * VO 주석 추가
 	MMusicDAO - sql_selectAll 수정
 		       sql_rand 수정
 	                  selectOne 메서드 수정
+	                  
+변경사항
